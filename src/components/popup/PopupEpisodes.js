@@ -26,6 +26,11 @@ export function PopupEpisodes({ episodes }) {
         } else {
           setSeries(data);
         }
+      })
+      .catch((error) => {
+        console.error('Ошибка получения эпизодов:', error);
+      })
+      .finally(() => {
         setIsFetching(false);
       });
   }, [episodes]);
