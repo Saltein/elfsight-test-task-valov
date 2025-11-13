@@ -28,6 +28,7 @@ export function DataProvider({ children }) {
         setIsFetching(false);
         setCharacters(data.results);
         setInfo(data.info);
+        console.log(data.results);
       })
       .catch((e) => {
         setIsFetching(false);

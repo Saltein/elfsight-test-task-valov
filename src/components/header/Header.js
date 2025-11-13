@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { Logo } from './Logo';
+import { FilterPanel } from '..';
 
 export function Header() {
   return (
     <HeaderContainer>
       <Logo />
+      <FilterPanel />
     </HeaderContainer>
   );
 }
