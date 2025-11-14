@@ -3,7 +3,13 @@ import { ReactComponent as Male } from '../assets/genders/male.svg';
 import { ReactComponent as Female } from '../assets/genders/female.svg';
 import { ReactComponent as Genderless } from '../assets/genders/genderless.svg';
 
-// TODO: Refactor the Card component
+const statusColors = { Alive: '#83bf46', Dead: '#ff5152' };
+const genderIcons = {
+  Male: <Male width={20} height={20} fill="#33b3c8" title="Male" />,
+  Female: <Female width={24} height={24} fill="pink" title="Female" />,
+  Other: <Genderless width={24} height={24} fill="#999" title="Genderless" />
+};
+
 export function Card({
   status,
   name,
@@ -16,65 +22,45 @@ export function Card({
   return (
     <StyledCard onClick={onClickHandler}>
       <CardImg src={image} alt={name} />
-
       <CardInfo>
         <CardTitle name={name} gender={gender} />
-
         <CardStatus status={status} species={species} type={type} />
       </CardInfo>
     </StyledCard>
   );
 }
 
-export function CardTitle({ name, gender, className }) {
-  const Icon = (() => {
-    if (gender === 'Male') {
-      return <Male width={20} height={20} fill="#33b3c8" title="Male" />;
-    }
-
-    if (gender === 'Female') {
-      return <Female width={24} height={24} fill="pink" title="Female" />;
-    }
-
-    if (gender === 'unknown' || gender === 'Genderless') {
-      return (
-        <Genderless width={24} height={24} fill="#999" title="Genderless" />
-      );
-    }
-
-    return null;
-  })();
+export function CardTitle({ name, gender }) {
+  const Icon = genderIcons[gender] || genderIcons.Other;
 
   return (
-    <CardTitleContainer className={className}>
+    <CardTitleContainer>
       <StyledCardTitle className="card-title">{name}</StyledCardTitle>
-
       <IconContainer>{Icon}</IconContainer>
     </CardTitleContainer>
   );
 }
 
-export function CardStatus({ status, species, type, className }) {
+export function CardStatus({ status, species, type }) {
   return (
-    <CardStatusContainer className={className}>
-      <StyledCardStatus status={status}>{status}</StyledCardStatus>
-      &nbsp;-&nbsp;
-      <CardSpecies>{species}</CardSpecies>
+    <CardStatusContainer status={status}>
+      {status}&nbsp;-&nbsp;{species}
       {type && <CardType>{type}</CardType>}
     </CardStatusContainer>
   );
 }
 
-const CardStatusContainer = styled.div`
+const FlexDiv = styled.div`
   display: flex;
-  flex-wrap: wrap;
 `;
 
-const StyledCardStatus = styled.span`
+const IconContainer = styled(FlexDiv)`
   display: flex;
-  align-items: center;
-  text-transform: capitalize;
+`;
 
+const CardStatusContainer = styled(FlexDiv)`
+  flex-wrap: wrap;
+  align-items: center;
   &::before {
     content: '';
     display: block;
@@ -82,30 +68,18 @@ const StyledCardStatus = styled.span`
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: ${({ status }) => {
-      switch (status) {
-        case 'Alive':
-          return '#83bf46';
-        case 'Dead':
-          return '#ff5152';
-        default:
-          return '#968c9d';
-      }
-    }};
+    background-color: ${({ status }) => statusColors[status] || '#968c9d'};
   }
 `;
 
-const CardSpecies = styled.span``;
-
 const CardType = styled.p`
   margin-top: 20px;
-  width: 100%;
   color: #ddd;
   font-size: 16px;
+  width: 100%;
 `;
 
-const StyledCard = styled.div`
-  display: flex;
+const StyledCard = styled(FlexDiv)`
   width: 100%;
   max-width: 400px;
   flex-direction: column;
@@ -117,10 +91,9 @@ const StyledCard = styled.div`
     cursor: pointer;
     transform: scale(1.01);
     box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  &:hover .card-title {
-    color: #83bf46;
+    & .card-title {
+      color: #83bf46;
+    }
   }
 `;
 
@@ -128,19 +101,13 @@ const CardImg = styled.img`
   border-radius: 10px 10px 0 0;
 `;
 
-const CardInfo = styled.div`
-  display: flex;
+const CardInfo = styled(FlexDiv)`
   flex-direction: column;
   color: #fff;
   padding: 20px;
 `;
 
-const IconContainer = styled.div`
-  display: flex;
-`;
-
-const CardTitleContainer = styled.div`
-  display: flex;
+const CardTitleContainer = styled(FlexDiv)`
   align-items: center;
   margin-bottom: 10px;
 `;
