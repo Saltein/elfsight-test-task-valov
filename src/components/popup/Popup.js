@@ -36,10 +36,12 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
 
   useEffect(() => {
     function closePopup(e) {
-      setSettings((prevState) => ({
-        ...prevState,
-        visible: false
-      }));
+      if (e.key === 'Escape') {
+        setSettings((prevState) => ({
+          ...prevState,
+          visible: false
+        }));
+      }
     }
 
     window.addEventListener('keydown', closePopup);
