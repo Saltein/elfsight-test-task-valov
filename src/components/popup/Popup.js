@@ -34,8 +34,21 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
     return () => (document.body.style.overflow = '');
   }, [visible]);
 
+  useEffect(() => {
+    function closePopup(e) {
+      setSettings((prevState) => ({
+        ...prevState,
+        visible: false
+      }));
+    }
+
+    window.addEventListener('keydown', closePopup);
+
+    return () => window.removeEventListener('keydown', closePopup);
+  });
+
   return (
-    <PopupContainer visible={visible}>
+    <PopupContainer visible={visible} onClick={togglePopup}>
       <StyledPopup>
         <CloseIcon onClick={togglePopup} />
 
