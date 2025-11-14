@@ -3,9 +3,39 @@ import { Button, SelectInput, TextInput } from './common';
 import { useData } from './providers';
 
 export function FilterPanel() {
-  const { statuses, genders, species } = useData();
+  const {
+    statuses,
+    genders,
+    species,
+    setFilters,
+    setActivePage,
+    setApiURL,
+    API_URL
+  } = useData();
 
-  console.log(statuses);
+  function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    let paramsObject = '';
+
+    params.forEach((value, key) => {
+      paramsObject += `&${key.toLowerCase()}=${value}`;
+    });
+
+    return paramsObject.toString();
+  }
+
+  function handleApply() {
+    const params = getUrlParams();
+    setActivePage(0);
+    setApiURL(API_URL);
+    setFilters(params);
+  }
+
+  function handleReset() {
+    setActivePage(0);
+    setApiURL(API_URL);
+    setFilters('');
+  }
 
   return (
     <StyledFilter>
@@ -24,8 +54,8 @@ export function FilterPanel() {
       <TextInput placeholder={'Name'} />
       <TextInput placeholder={'Type'} />
       <Container>
-        <Button name={'Apply'} />
-        <Button name={'Reset'} variant="red" />
+        <Button name={'Apply'} onClick={handleApply} />
+        <Button name={'Reset'} variant="red" onClick={handleReset} />
       </Container>
     </StyledFilter>
   );
@@ -40,6 +70,7 @@ const StyledFilter = styled.div`
 
   @media (max-width: 1520px) {
     width: 482px;
+    gap: 15px;
   }
 
   @media (max-width: 530px) {
@@ -55,5 +86,6 @@ const Container = styled.div`
 
   @media (max-width: 530px) {
     flex-direction: column;
+    gap: 15px;
   }
 `;

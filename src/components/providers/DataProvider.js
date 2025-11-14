@@ -21,6 +21,8 @@ export function DataProvider({ children }) {
   const [genders, setGenders] = useState([]);
   const [species, setSpecies] = useState([]);
 
+  const [filters, setFilters] = useState('');
+
   async function getAllParams(pageCount) {
     if (!pageCount) return;
 
@@ -48,23 +50,29 @@ export function DataProvider({ children }) {
     }
   }
 
-  const fetchData = useCallback(async (url) => {
-    setIsFetching(true);
-    setIsError(false);
+  const fetchData = useCallback(
+    async (url) => {
+      setIsFetching(true);
+      setIsError(false);
 
-    axios
-      .get(url)
-      .then(({ data }) => {
-        setIsFetching(false);
-        setCharacters(data.results);
-        setInfo(data.info);
-      })
-      .catch((e) => {
-        setIsFetching(false);
-        setIsError(true);
-        console.error(e);
-      });
-  }, []);
+      const prefix = url.toString().includes('?') ? '' : '?';
+      const fullUrl = url + prefix + filters;
+
+      axios
+        .get(fullUrl)
+        .then(({ data }) => {
+          setIsFetching(false);
+          setCharacters(data.results);
+          setInfo(data.info);
+        })
+        .catch((e) => {
+          setIsFetching(false);
+          setIsError(true);
+          console.error(e);
+        });
+    },
+    [filters]
+  );
 
   useEffect(() => {
     fetchData(apiURL);
@@ -87,7 +95,10 @@ export function DataProvider({ children }) {
       info,
       statuses,
       genders,
-      species
+      species,
+      filters,
+      setFilters,
+      API_URL
     }),
     [
       activePage,
@@ -99,7 +110,8 @@ export function DataProvider({ children }) {
       fetchData,
       statuses,
       genders,
-      species
+      species,
+      filters
     ]
   );
 

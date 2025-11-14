@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 
-export function Button({ name, variant = 'green' }) {
-  return <StyledButton variant={variant}>{name}</StyledButton>;
+export function Button({ name, variant = 'green', onClick = () => {} }) {
+  return (
+    <StyledButton variant={variant} onClick={onClick}>
+      {name}
+    </StyledButton>
+  );
 }
 
 const StyledButton = styled.button`
