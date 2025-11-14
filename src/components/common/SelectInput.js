@@ -17,8 +17,8 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
     setIsOpen(false);
 
     const params = new URLSearchParams(window.location.search);
-    if (option?.value) {
-      params.set(filter, option.value);
+    if (option) {
+      params.set(filter, option);
     } else {
       params.delete(filter);
     }
@@ -38,7 +38,7 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setCurrentOption(options.find((item) => item.value === params.get(filter)));
+    setCurrentOption(options.find((item) => item === params.get(filter)));
   }, [filter, options]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
     <Wrapper ref={optionsRef}>
       <StyledSelect onClick={handleToggle}>
         {currentOption ? (
-          <span>{currentOption?.name}</span>
+          <span>{currentOption}</span>
         ) : (
           <StyledPlaceholder>{placeholder}</StyledPlaceholder>
         )}
@@ -80,10 +80,10 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
                   onClick={() => {
                     handleSelect(option);
                   }}
-                  value={option?.value}
-                  currentOptionValue={currentOption?.value}
+                  value={option}
+                  currentOptionValue={currentOption}
                 >
-                  {option?.name}
+                  {option}
                 </Option>
               );
             })}

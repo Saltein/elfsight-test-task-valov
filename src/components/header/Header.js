@@ -14,6 +14,10 @@ export function Header() {
 const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 1520px) {
+    flex-direction: column;
+  }
 `;
