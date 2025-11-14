@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { Button, SelectInput, TextInput } from './common';
 import { useData } from './providers';
+import { useState } from 'react';
 
 export function FilterPanel() {
+  const [resetSignal, setResetSignal] = useState(true);
+
   const {
     statuses,
     genders,
@@ -35,6 +38,11 @@ export function FilterPanel() {
     setActivePage(0);
     setApiURL(API_URL);
     setFilters('');
+
+    const url = new URL(window.location);
+    url.search = '';
+    window.history.replaceState({}, '', url);
+    setResetSignal((prev) => !prev);
   }
 
   return (
@@ -43,16 +51,23 @@ export function FilterPanel() {
         options={statuses}
         filter={'Status'}
         placeholder={'Status'}
+        resetSignal={resetSignal}
       />
-      <SelectInput options={genders} filter={'Gender'} placeholder={'Gender'} />
+      <SelectInput
+        options={genders}
+        filter={'Gender'}
+        placeholder={'Gender'}
+        resetSignal={resetSignal}
+      />
       <SelectInput
         options={species}
         filter={'Species'}
         placeholder={'Species'}
+        resetSignal={resetSignal}
       />
 
-      <TextInput placeholder={'Name'} />
-      <TextInput placeholder={'Type'} />
+      <TextInput placeholder={'Name'} resetSignal={resetSignal} />
+      <TextInput placeholder={'Type'} resetSignal={resetSignal} />
       <Container>
         <Button name={'Apply'} onClick={handleApply} />
         <Button name={'Reset'} variant="red" onClick={handleReset} />

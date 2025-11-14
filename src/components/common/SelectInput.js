@@ -3,7 +3,12 @@ import { ReactComponent as ArrowIcon } from '../../assets/icons/dropdown-arrow.s
 import { ReactComponent as CrossIcon } from '../../assets/icons/cross.svg';
 import { useEffect, useRef, useState } from 'react';
 
-export function SelectInput({ filter, options, placeholder = 'Select' }) {
+export function SelectInput({
+  filter,
+  options,
+  placeholder = 'Select',
+  resetSignal
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
   const optionsRef = useRef(null);
@@ -39,7 +44,7 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setCurrentOption(options.find((item) => item === params.get(filter)));
-  }, [filter, options]);
+  }, [filter, options, resetSignal]);
 
   useEffect(() => {
     function handleClickOutside(event) {

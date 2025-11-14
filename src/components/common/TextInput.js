@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export function TextInput({ placeholder }) {
+export function TextInput({ placeholder, resetSignal }) {
   const [currentText, setCurrentText] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setCurrentText(params.get(placeholder) || '');
-  }, [placeholder]);
+  }, [placeholder, resetSignal]);
 
   function onChange(e) {
     const value = e.target.value;
