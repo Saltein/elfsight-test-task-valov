@@ -17,6 +17,36 @@ export function DataProvider({ children }) {
   const [isError, setIsError] = useState(false);
   const [info, setInfo] = useState({});
   const [apiURL, setApiURL] = useState(API_URL);
+  const [statuses, setStatuses] = useState([]);
+  const [genders, setGenders] = useState([]);
+  const [species, setSpecies] = useState([]);
+
+  async function getAllParams(pageCount) {
+    if (!pageCount) return;
+
+    const statuses = new Set();
+    const genders = new Set();
+    const species = new Set();
+
+    try {
+      for (let page = 1; page <= pageCount; page++) {
+        const { data } = await axios.get(`${API_URL}?page=${page}`);
+
+        data.results.forEach((char) => {
+          statuses.add(char.status);
+          genders.add(char.gender);
+          species.add(char.species);
+        });
+      }
+
+      setStatuses([...statuses]);
+      setGenders([...genders]);
+      setSpecies([...species]);
+    } catch (e) {
+      console.error('Ошибка при загрузке параметров', e);
+      setIsError(true);
+    }
+  }
 
   const fetchData = useCallback(async (url) => {
     setIsFetching(true);
@@ -28,7 +58,6 @@ export function DataProvider({ children }) {
         setIsFetching(false);
         setCharacters(data.results);
         setInfo(data.info);
-        console.log(data.results);
       })
       .catch((e) => {
         setIsFetching(false);
@@ -41,6 +70,10 @@ export function DataProvider({ children }) {
     fetchData(apiURL);
   }, [apiURL, fetchData]);
 
+  useEffect(() => {
+    getAllParams(info?.pages);
+  }, [info]);
+
   const dataValue = useMemo(
     () => ({
       activePage,
@@ -51,9 +84,23 @@ export function DataProvider({ children }) {
       fetchData,
       isFetching,
       isError,
-      info
+      info,
+      statuses,
+      genders,
+      species
     }),
-    [activePage, apiURL, characters, isFetching, isError, info, fetchData]
+    [
+      activePage,
+      apiURL,
+      characters,
+      isFetching,
+      isError,
+      info,
+      fetchData,
+      statuses,
+      genders,
+      species
+    ]
   );
 
   return (

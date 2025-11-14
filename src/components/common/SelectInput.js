@@ -67,7 +67,7 @@ export function SelectInput({ filter, options, placeholder = 'Select' }) {
         {currentOption && !isOpen ? (
           <StyledCrossIcon onClick={handleClear} />
         ) : (
-          <StyledArrowIcon isOpen={isOpen} />
+          <StyledArrowIcon open={isOpen} />
         )}
       </StyledSelect>
       {isOpen && (
@@ -172,14 +172,14 @@ const Option = styled.div`
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`
-  color: ${(props) => (props.isOpen ? 'white' : '#b2b2b2')};
+  color: ${(props) => (props.open ? 'white' : '#b2b2b2')};
   width: 16px;
   height: 16px;
   position: absolute;
   top: calc(50% - 8px);
   right: 12px;
   pointer-events: none;
-  transform: rotate(${(props) => (props.isOpen ? '180deg' : '0')});
+  transform: rotate(${(props) => (props.open ? '180deg' : '0')});
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`
